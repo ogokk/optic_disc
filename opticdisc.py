@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Nov  1 10:10:01 2024
-
+Optic Disc Disease Classification using Multi-Attention Block with Combined CNN
 @author: ozangokkan
 """
 
@@ -242,11 +241,6 @@ def validate_epoch(model, val_loader, criterion, config):
     
     return running_loss / len(val_loader), accuracy, dice_val, mcc_val
 
-#command line usage
-#(colon) PS C:\Users\ozangokkan\Desktop\OpticDisc>
-#python opticdisc.py --batch_size 32 --learning_rate 0.0001 --epochs 30 --model 
-#CombinedModel --log_dir ./logs --checkpoint_dir ./checkpoints --device cuda
-
 fold_metrics = []
 
 def main():
@@ -339,7 +333,6 @@ def main():
                 torch.save(model.state_dict(), best_checkpoint_path)
                 print(f"Best model checkpoint saved for fold {fold + 1}, epoch {best_epoch} to {best_checkpoint_path}")
     
-            # Track metrics for analysis later if needed
             fold_metrics.append({
                 "epoch": epoch + 1,
                 "train_loss": train_loss,
