@@ -23,35 +23,37 @@ pip install -r requirements.txt
 ```
 # Best model selection 
 ```python
-for metrics in fold_metrics:
-            print(f"Epoch {metrics['epoch']} - Train Loss: {metrics['train_loss']:.2f} | "
-                  f"Train Accuracy: {metrics['train_accuracy']:.2f}% | "
-                  f"Train Dice: {metrics['train_dice']:.2f} | "
-                  f"Train MCC: {metrics['train_mcc']:.2f} | "
-                  f"Val Loss: {metrics['val_loss']:.2f}% | "
-                  f"Val Accuracy: {metrics['val_accuracy']:.2f}% | "
-                  f"Val Dice: {metrics['val_dice']:.4f} | "
-                  f"Val MCC: {metrics['val_mcc']:.4f}")
+fold_metrics.append({
+                "epoch": epoch + 1,
+                "train_loss": train_loss,
+                "train_accuracy": train_acc,
+                "train_dice": dice_train,
+                "train_mcc": mcc_train,
+                "val_loss": val_loss,
+                "val_accuracy": val_acc,
+                "val_dice": val_dice,
+                "val_mcc": val_mcc
+            })
 
-    test_dataset = ImageFolder(test_dir, transform=Transform(albumentations_transforms))
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-    best_epoch_index = max(range(len(fold_metrics)), key=lambda i: (fold_metrics[i]['val_accuracy'], -fold_metrics[i]['val_loss']))
-    best_model_metrics = fold_metrics[best_epoch_index]
-    fold_number = int(np.ceil(best_epoch_index/50))
-    best_epoch = best_model_metrics['epoch']
-    checkpoint_path = f"C:/Users/ProArt/Desktop/ozan/opticdisc/checkpoints/best_model_fold_{fold_number}_epoch_{best_epoch}.pth"
+test_dataset = ImageFolder(test_dir, transform=Transform(albumentations_transforms))
+test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+best_epoch_index = max(range(len(fold_metrics)), key=lambda i: (fold_metrics[i]['val_accuracy'], -fold_metrics[i]['val_loss']))
+best_model_metrics = fold_metrics[best_epoch_index]
+fold_number = int(np.ceil(best_epoch_index/50))
+best_epoch = best_model_metrics['epoch']
+checkpoint_path = f"C:/Users/ProArt/Desktop/ozan/opticdisc/checkpoints/best_model_fold_{fold_number}_epoch_{best_epoch}.pth"
 
-    # Load the model
-    model.load_state_dict(torch.load(checkpoint_path))
-    model.to(device)
-    model.eval()
-    # Evaluate the model
-    accuracy, mcc, dice, confmat = test_model(model, test_loader, device)
-    print("\n")
-    print(f"Test Accuracy: {accuracy * 100:.2f}%")
-    print(f"Test MCC: {mcc:.4f}")
-    print(f"Test Dice: {dice:.4f}")
-    print(f"Confusion Matrix: \n{confmat}")
+# Load the model
+model.load_state_dict(torch.load(checkpoint_path))
+model.to(device)
+model.eval()
+# Evaluate the model
+accuracy, mcc, dice, confmat = test_model(model, test_loader, device)
+print("\n")
+print(f"Test Accuracy: {accuracy * 100:.2f}%")
+print(f"Test MCC: {mcc:.4f}")
+print(f"Test Dice: {dice:.4f}")
+print(f"Confusion Matrix: \n{confmat}")
 ```
 
 
