@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Optic Disc Disease Classification using Multi-Attention Block with Combined CNN
+Optic Disc Classification using Multi-Attention Block with Combined CNN
 @author: ozangokkan
 """
 
