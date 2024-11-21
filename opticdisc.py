@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Optic Disc Classification using Multi-Attention Block with Combined CNN
 @author: ozangokkan
 """
 
 import argparse
-#import json
 import os
 import logging
 import torch
@@ -15,11 +13,9 @@ from torch.utils.data import DataLoader, random_split
 from sklearn.model_selection import KFold
 from torchvision import datasets, transforms
 from sklearn.metrics import matthews_corrcoef
-#from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 from torchvision import models
 from efficientnet_pytorch import EfficientNet
-from pytorch_wavelets import DTCWTForward, DTCWTInverse
 import albumentations as A
 import cv2
 from albumentations.pytorch import ToTensorV2 as ToTensor
@@ -28,8 +24,6 @@ from tqdm import tqdm
 import time
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 import torch.nn.functional as F
-# from torch.cuda.amp import GradScaler
-
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Deep Neural Network for Optic Disc Image Classification")
@@ -61,7 +55,7 @@ def setup_logging(log_dir='./logs'):
     log_filename = os.path.join(log_dir, "training.log")
 
     logging.basicConfig(
-        level=logging.INFO,  # Log everything at the INFO level or higher
+        level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=[
             logging.FileHandler(log_filename),
@@ -70,7 +64,6 @@ def setup_logging(log_dir='./logs'):
     )
     logging.info("Logging setup complete. Logs are saved in '%s'", log_filename)
 
-# Example of logging during the training process
 def log_epoch_metrics(epoch, metrics):
     logging.info(f"Epoch {epoch}: Train Loss = {metrics['train_loss']:.4f}, "
                  f"Train Accuracy = {metrics['train_accuracy']:.2f}%, "
@@ -100,7 +93,7 @@ class Transform():
     def __call__(self, image):
         return self.transform(image=np.array(image))["image"]
 
-# Directory paths for training dataset
+# Directory path for training dataset
 train_dir = 'C:/Users/ProArt/Desktop/ozan/opticdisc/Train'
 
 
@@ -130,7 +123,6 @@ class AttentionCNNCombined(nn.Module):
         resnet_out = self.resnet(x)  # Shape: (batch_size, resnet_channels)
         efficientnet_out = self.efficientnet(x)  # (batch_size, efficientnet_channels)
 
-        
         # print(f"efficientnet shape: {efficientnet_out.shape}")
         # print(f"resnet50 shape: {resnet_out.shape}")
 
@@ -138,7 +130,7 @@ class AttentionCNNCombined(nn.Module):
         combined_features = combined_features.unsqueeze(0)  
         attn_output, _ = self.attention(combined_features, combined_features, combined_features)  # Self-attention for query, key, values
         attn_output = attn_output.squeeze(0)
-
+        
         output = self.fc(attn_output)  #(batch_size, num_classes)
         
         return output
@@ -250,10 +242,8 @@ def main():
     train_dataset = ImageFolder(train_dir, transform=Transform(albumentations_transforms))
 
     k = 5  # k fold cross-validation
-    
     kfold = KFold(n_splits=k, shuffle=True, random_state=5)
     
-
     # Save model checkpoint
     checkpoint_dir = './checkpoints'
     if not os.path.exists(checkpoint_dir):
@@ -363,7 +353,7 @@ if __name__ == "__main__":
 
 
 #------------------------------------------------------------------------------
-## PLOT the Metrics train and val loss, accuracies, dices and mcc's
+## PLOT the Metrics: Train and Val loss, Accuracies, Dices and MCC's
 #------------------------------------------------------------------------------
 
 import matplotlib.pyplot as plt
@@ -382,13 +372,8 @@ val_accuracy = [metrics['val_accuracy'] for metrics in fold_metrics]
 val_dice = [metrics['val_dice'] for metrics in fold_metrics]
 val_mcc = [metrics['val_mcc'] for metrics in fold_metrics]
 
-# Create a figure for plotting (with multiple subplots for different metrics)
 fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-
-# Flatten the axes array to make it easier to iterate over
 axes = axes.flatten()
-
-# List of metrics and their respective titles
 metrics = [
     ('Train - Val Loss', train_loss, val_loss),
     ('Train - Val Accuracy', train_accuracy, val_accuracy),
@@ -400,7 +385,6 @@ metrics = [
 for i, (metric_name, train_data, val_data) in enumerate(metrics):
     ax = axes[i]
     
-    # Loop over each fold and plot its respective losses/accuracy for the current metric
     for fold in range(num_folds):
         start_idx = fold * epochs_per_fold
         end_idx = (fold + 1) * epochs_per_fold
@@ -445,9 +429,9 @@ class Transform():
     def __call__(self, image):
         return self.transform(image=np.array(image))["image"]
 
+# Directory path for Test dataset
 test_dir = 'C:/Users/ProArt/Desktop/ozan/opticdisc/Test'
 batch_size = 16
-
 
 def test_model(model, test_loader, device):
     all_preds = []
@@ -477,17 +461,12 @@ def test_model(model, test_loader, device):
     all_preds_str = [class_names[pred] for pred in all_preds.numpy()]
     all_labels_str = [class_names[label] for label in all_labels.numpy()]
     
-    # Use the string labels for confusion matrix
     confmat = confusion_matrix(all_labels_str, all_preds_str, labels=class_names)
-    
     
     return accuracy, mcc, dice, confmat
 
 def main():
-    
-    # Set device
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    
     # Load test dataset
     test_dataset = ImageFolder(test_dir, transform=Transform(albumentations_transforms))
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
