@@ -3,8 +3,6 @@
 
 class_names = ['Atrophy', 'Cupping', 'Drusen', 'Normal', 'Papilledema', 'Tilted']
 
-# Performance Metrics for each fold
-![fold_metrics_plot](https://github.com/user-attachments/assets/2c8699ca-d3d0-4f89-aebc-e5e245259810)
 
 # Run from CLI 
 ```bash
@@ -19,6 +17,7 @@ python opticdisc.py --batch_size 32 --learning_rate 0.0001 --epochs 50 --model A
 cd optic_disc
 pip install -r requirements.txt
 ```
+
 # Best model selection 
 ```python
 fold_metrics.append({
