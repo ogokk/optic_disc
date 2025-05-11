@@ -449,7 +449,7 @@ def test_model(model, test_loader, device):
             all_preds.append(predicted.cpu())
             all_labels.append(labels.cpu())
     
-    # Flatten lists
+    # Concatenate batched preds and targets (labels)
     all_preds = torch.cat(all_preds)
     all_labels = torch.cat(all_labels)
     
