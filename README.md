@@ -40,11 +40,11 @@ fold_number = int(np.ceil(best_epoch_index/50))
 best_epoch = best_model_metrics['epoch']
 checkpoint_path = f"C:/Users/ProArt/Desktop/ozan/opticdisc/checkpoints/best_model_fold_{fold_number}_epoch_{best_epoch}.pth"
 
-# Load the model
+
 model.load_state_dict(torch.load(checkpoint_path))
 model.to(device)
 model.eval()
-# Evaluate the model
+
 accuracy, mcc, dice, confmat = test_model(model, test_loader, device)
 print("\n")
 print(f"Test Accuracy: {accuracy * 100:.2f}%")
