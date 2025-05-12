@@ -1,7 +1,3 @@
-"""
-Optic Disc Classification using Multi-Attention Block with Combined CNN
-@author: ozangokkan
-"""
 
 import argparse
 import os
@@ -93,7 +89,7 @@ class Transform():
     def __call__(self, image):
         return self.transform(image=np.array(image))["image"]
 
-# Directory path for training dataset
+
 train_dir = 'C:/Users/ProArt/Desktop/ozan/opticdisc/Train'
 
 
@@ -208,9 +204,6 @@ def validate_epoch(model, val_loader, criterion, config):
             labels = labels.to(config['device'])
             
             outputs = model(inputs).to(config['device'])  
-            
-            
-            # Flatten the output to [batch_size, n_class]
             outputs = outputs.view(outputs.size(0), -1)
             
             loss = criterion(outputs, labels)
@@ -227,7 +220,6 @@ def validate_epoch(model, val_loader, criterion, config):
     all_preds = torch.cat(all_preds)
     all_labels = torch.cat(all_labels)
     
-    # Calculate metrics
     dice_val = dice_coefficient(all_preds.cpu().numpy(), all_labels.cpu().numpy())
     mcc_val = mcc(all_preds.cpu().numpy(), all_labels.cpu().numpy())
     
@@ -236,7 +228,6 @@ def validate_epoch(model, val_loader, criterion, config):
 fold_metrics = []
 
 def main():
-    # Load config
     config = parse_args()
     setup_logging(config['log_dir'])
     train_dataset = ImageFolder(train_dir, transform=Transform(albumentations_transforms))
@@ -244,7 +235,6 @@ def main():
     k = 5  # k fold cross-validation
     kfold = KFold(n_splits=k, shuffle=True, random_state=5)
     
-    # Save model checkpoint
     checkpoint_dir = './checkpoints'
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
@@ -258,7 +248,6 @@ def main():
         print(f"----------- Fold: {fold + 1}  --- time: {start} -----------")
         logging.info(f"Training fold {fold+1}/{k}...")
         
-        # Split dataset into train and validation sets
         train_subsampler = torch.utils.data.SubsetRandomSampler(train_idx)
         val_subsampler = torch.utils.data.SubsetRandomSampler(val_idx)
         
@@ -270,7 +259,6 @@ def main():
         best_checkpoint_path = ""
 
 
-        # Training loop for all epochs
         for epoch in range(config["epochs"]):
             start_time = time.strftime("%H:%M:%S")
             print(f"----------- Epoch {epoch + 1}/{config['epochs']} --- time: {start_time} -----------")
@@ -316,10 +304,9 @@ def main():
 
             if val_acc > best_val_acc:
                 best_val_acc = val_acc
-                best_epoch = epoch + 1  # Save the epoch number
+                best_epoch = epoch + 1 
                 best_checkpoint_path = os.path.join(config['checkpoint_dir'], f"best_model_fold_{fold + 1}_epoch_{best_epoch}.pth")
             
-                # Save the best model
                 torch.save(model.state_dict(), best_checkpoint_path)
                 print(f"Best model checkpoint saved for fold {fold + 1}, epoch {best_epoch} to {best_checkpoint_path}")
     
@@ -361,7 +348,7 @@ import matplotlib.pyplot as plt
 num_folds = 5
 epochs_per_fold = 50
 
-# Extract metrics for plotting
+# Metrics for plotting
 epochs = [metrics['epoch'] for metrics in fold_metrics]
 train_loss = [metrics['train_loss'] for metrics in fold_metrics]
 train_accuracy = [metrics['train_accuracy'] for metrics in fold_metrics]
@@ -381,7 +368,6 @@ metrics = [
     ('Train - Val MCC', train_mcc, val_mcc),
 ]
 
-# Loop over each metric and plot its data
 for i, (metric_name, train_data, val_data) in enumerate(metrics):
     ax = axes[i]
     
@@ -397,14 +383,14 @@ for i, (metric_name, train_data, val_data) in enumerate(metrics):
         ax.plot(fold_epochs, fold_train_data, label=f"Fold {fold + 1} Train", linestyle='-', marker='o')
         ax.plot(fold_epochs, fold_val_data, label=f"Fold {fold + 1} Val", linestyle='--', marker='x')
 
-    # Set title, labels, and grid for the subplot
+    
     ax.set_title(f'{metric_name} for Each Fold')
     ax.set_xlabel('Epochs #')
     ax.set_ylabel(metric_name)
     ax.grid(True)
     ax.legend()
 
-# Adjust layout for better spacing between subplots
+
 plt.tight_layout()
 fig.savefig('fold_metrics_plot.png', dpi=600)
 plt.show()
@@ -442,18 +428,15 @@ def test_model(model, test_loader, device):
             inputs = inputs.to(device)
             labels = labels.to(device)
             
-            # Forward pass
             outputs = model(inputs)
             _, predicted = torch.max(outputs, 1)
             
             all_preds.append(predicted.cpu())
             all_labels.append(labels.cpu())
     
-    # Concatenate batched preds and targets (labels)
     all_preds = torch.cat(all_preds)
     all_labels = torch.cat(all_labels)
     
-    # Calculate accuracy, MCC and Confusion Matrix
     accuracy = accuracy_score(all_labels, all_preds)
     mcc = matthews_corrcoef(all_labels, all_preds)
     dice = f1_score(all_labels, all_preds, average="macro")
@@ -467,7 +450,7 @@ def test_model(model, test_loader, device):
 
 def main():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    # Load test dataset
+    
     test_dataset = ImageFolder(test_dir, transform=Transform(albumentations_transforms))
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     best_epoch_index = max(range(len(fold_metrics)), key=lambda i: (fold_metrics[i]['val_accuracy'], -fold_metrics[i]['val_loss']))
@@ -476,11 +459,11 @@ def main():
     best_epoch = best_model_metrics['epoch']
     checkpoint_path = f"C:/Users/ProArt/Desktop/ozan/opticdisc/checkpoints/best_model_fold_{fold_number}_epoch_{best_epoch}.pth"
 
-    # Load the model
+    
     model.load_state_dict(torch.load(checkpoint_path))
     model.to(device)
     model.eval()
-    # Evaluate the model
+    
     accuracy, mcc, dice, confmat = test_model(model, test_loader, device)
     print("\n")
     print(f"Test Accuracy: {accuracy * 100:.2f}%")
