@@ -1,4 +1,4 @@
-# Optic Disc Classification using Multi-Attention Block with Combined CNN
+# Optic Disc Classification using Cross Modal Feature Fusion Attention Network
 
 
 class_names = ['Atrophy', 'Cupping', 'Drusen', 'Normal', 'Papilledema', 'Tilted']
