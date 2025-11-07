@@ -160,7 +160,6 @@ def train_epoch(model, train_loader, criterion, optimizer, config):
 
     for inputs, labels in tqdm(train_loader):
         inputs, labels = inputs.to(config['device']), labels.to(config['device'])
-        optimizer.zero_grad()
         outputs = model(inputs).to(config['device'])
         loss = criterion(outputs, labels)
         loss = loss / accumulation_steps
@@ -473,3 +472,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
