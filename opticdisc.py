@@ -50,7 +50,7 @@ def parse_args():
     parser.add_argument('--learning_rate', type=float, default=0.0001, help='Learning rate for the optimizer')
     parser.add_argument('--weight_decay_rate', type=float, default=0.0001, help='Weight decay rate for the AdamW optimizer')
     parser.add_argument('--epochs', type=int, default=50, help='Number of epochs for training')
-    parser.add_argument('--model', type=str, default='AttentionCNNCombined', choices=['AttentionCNNCombined','CombinedModel'], help='Model type')
+    parser.add_argument('--model', type=str, default='AttentionCNNCombined', choices=['AttentionCNNCombined'], help='Model type')
     parser.add_argument('--log_dir', type=str, default='./logs', help='Directory for TensorBoard logs')
     parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints', help='Directory for model checkpoints')
     parser.add_argument('--device', type=str, default=None, choices=['cpu', 'cuda'], 
@@ -493,5 +493,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
