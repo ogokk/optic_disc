@@ -1,4 +1,4 @@
-# Optic Disc Classification using Cross Modal Feature Fusion Attention Network
+# FAN-X: Cross-Modal Feature Fusion Attention Network 
 
 
 class_names = ['Atrophy', 'Cupping', 'Drusen', 'Normal', 'Papilledema', 'Tilted']
