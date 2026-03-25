@@ -1,6 +1,7 @@
 <h1 align="center">
   FAN-X: Cross-Branch Feature Fusion Attention Network <a href="https://doi.org/10.1016/j.ajoint.2026.100249">[Paper]</a>
 </h1>
+
 ![Figure 1 (1)](https://github.com/user-attachments/assets/1bcb8c7a-b281-403e-9aa9-61cee0f6792d)
 
 
