@@ -1,11 +1,4 @@
-# FAN-X: Cross-Branch Feature Fusion Attention Network 
-<p align="center">
-  <a href="https://doi.org/10.1016/j.ajoint.2026.100249" style="text-decoration:none;">
-    <span style="background-color:#2f80ed;color:white;padding:8px 14px;border-radius:6px;font-weight:600;">
-      Paper
-    </span>
-  </a>
-</p>
+# FAN-X: Cross-Branch Feature Fusion Attention Network <a href="https://doi.org/10.1016/j.ajoint.2026.100249">[Paper]</a>
 
 ![Figure 1 (1)](https://github.com/user-attachments/assets/1bcb8c7a-b281-403e-9aa9-61cee0f6792d)
 
