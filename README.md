@@ -1,7 +1,9 @@
 # FAN-X: Cross-Branch Feature Fusion Attention Network 
 <p align="center">
-  <a href="https://doi.org/10.1016/j.ajoint.2026.100249">
-    <img src="https://img.shields.io/badge/Paper-blue?style=for-the-badge">
+  <a href="https://doi.org/10.1016/j.ajoint.2026.100249" style="text-decoration:none;">
+    <span style="background-color:#2f80ed;color:white;padding:8px 14px;border-radius:6px;font-weight:600;">
+      Paper
+    </span>
   </a>
 </p>
 
