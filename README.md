@@ -1,7 +1,7 @@
 # FAN-X: Cross-Branch Feature Fusion Attention Network 
+[Paper](https://doi.org/10.1016/j.ajoint.2026.100249)
 
-
-class_names = ['Atrophy', 'Cupping', 'Drusen', 'Normal', 'Papilledema', 'Tilted']
+![Figure 1 (1)](https://github.com/user-attachments/assets/1bcb8c7a-b281-403e-9aa9-61cee0f6792d)
 
 
 # Run from CLI 
@@ -54,4 +54,13 @@ print(f"Confusion Matrix: \n{confmat}")
 ```
 
 
+## Citation
 
+```bibtex
+@article{durmazengin2026,
+  title={Evaluation of Automated Machine Learning Platforms Against an Expert-Designed Deep Learning Model for Optic Disc Abnormality Detection},
+  author={Durmaz Engin, Ceren and Gokkan, Mahmut Ozan and Ozizmirliler, Denizcan and Besenk, Ufuk and Selver, Mustafa Alper and Soylev Bajin, Meltem and Grzybowski, Andrzej},
+  journal={American Journal of Ophthalmology International},
+  year={2026},
+  url={https://doi.org/10.1016/j.ajoint.2026.100249},
+}
