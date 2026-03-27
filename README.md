@@ -1,7 +1,8 @@
 <h1 align="center">
-  FAN-X: Cross-Branch Feature Fusion Attention Network <a href="https://doi.org/10.1016/j.ajoint.2026.100249">[Paper]</a>
+   Evaluation of Automated Machine Learning Platforms Against An Expert-Designed Deep Learning Model For Optic Disc Abnormality Detection<a href="https://doi.org/10.1016/j.ajoint.2026.100249">[Paper]</a>
 </h1>
 
+## FAN-X: Cross-Branch Feature Fusion Attention Network
 ![Figure 1 (1)](https://github.com/user-attachments/assets/1bcb8c7a-b281-403e-9aa9-61cee0f6792d)
 
 
